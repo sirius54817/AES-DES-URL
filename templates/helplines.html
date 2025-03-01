@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block title %}Helplines{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="relative overflow-hidden bg-gradient-to-br from-emerald-50 to-blue-50 rounded-3xl mb-16">
+    <div class="absolute inset-0">
+        <div class="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-blue-500/10"></div>
+        <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white"></div>
+    </div>
+    <div class="relative max-w-6xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                Emergency Helplines
+                <span class="block text-2xl mt-2 text-emerald-600">24/7 Support When You Need It</span>
+            </h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Immediate assistance for cybercrime incidents and digital security emergencies.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="max-w-6xl mx-auto">
+    <!-- Emergency Contact Section -->
+    <div class="bg-red-50 rounded-xl p-6 mb-12 border-2 border-red-200 shadow-lg">
+        <div class="flex items-center space-x-4 mb-6">
+            <div class="bg-red-100 p-3 rounded-full">
+                <i class="fas fa-exclamation-triangle text-2xl text-red-600"></i>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold text-red-900">Emergency Cyber Crime Reporting</h2>
+                <p class="text-red-700">For immediate assistance in case of cyber attacks or online fraud</p>
+            </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6">
+            <div class="bg-white rounded-lg p-4 shadow-md">
+                <div class="flex items-center space-x-3 text-red-600 mb-2">
+                    <i class="fas fa-phone-alt"></i>
+                    <span class="font-semibold">National Helpline</span>
+                </div>
+                <p class="text-3xl font-bold">1930</p>
+                <p class="text-gray-600 mt-2">Toll-free number for reporting cyber fraud</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 shadow-md">
+                <div class="flex items-center space-x-3 text-red-600 mb-2">
+                    <i class="fas fa-globe"></i>
+                    <span class="font-semibold">Online Portal</span>
+                </div>
+                <a href="https://cybercrime.gov.in" target="_blank" 
+                   class="text-blue-600 hover:text-blue-800 text-lg font-medium">
+                    cybercrime.gov.in
+                </a>
+                <p class="text-gray-600 mt-2">Official portal for cybercrime reporting</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Helpline Categories -->
+    <div class="grid md:grid-cols-3 gap-8 mb-12">
+        <!-- Women & Child Safety -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+            <div class="bg-purple-50 p-4">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-users text-2xl text-purple-600"></i>
+                    <h3 class="text-xl font-semibold text-gray-900">Women & Child Safety</h3>
+                </div>
+            </div>
+            <div class="p-6 space-y-4">
+                <div class="flex items-center justify-between">
+                    <span class="text-gray-600">Women Helpline</span>
+                    <span class="font-semibold">1091</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-gray-600">Child Helpline</span>
+                    <span class="font-semibold">1098</span>
+                </div>
+                <div class="border-t pt-4">
+                    <p class="text-sm text-gray-500">24/7 support for online harassment and cyberbullying</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Financial Fraud -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+            <div class="bg-amber-50 p-4">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-money-bill-wave text-2xl text-amber-600"></i>
+                    <h3 class="text-xl font-semibold text-gray-900">Financial Fraud</h3>
+                </div>
+            </div>
+            <div class="p-6 space-y-4">
+                <div class="flex items-center justify-between">
+                    <span class="text-gray-600">Banking Fraud</span>
+                    <span class="font-semibold">1800-111-363</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-gray-600">RBI Helpline</span>
+                    <span class="font-semibold">14440</span>
+                </div>
+                <div class="border-t pt-4">
+                    <p class="text-sm text-gray-500">Report unauthorized transactions and banking fraud</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Social Media -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+            <div class="bg-blue-50 p-4">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-share-alt text-2xl text-blue-600"></i>
+                    <h3 class="text-xl font-semibold text-gray-900">Social Media</h3>
+                </div>
+            </div>
+            <div class="p-6 space-y-4">
+                <a href="#" class="flex items-center justify-between hover:bg-gray-50 p-2 rounded">
+                    <span class="text-gray-600">Facebook</span>
+                    <i class="fas fa-external-link-alt text-blue-500"></i>
+                </a>
+                <a href="#" class="flex items-center justify-between hover:bg-gray-50 p-2 rounded">
+                    <span class="text-gray-600">Twitter</span>
+                    <i class="fas fa-external-link-alt text-blue-500"></i>
+                </a>
+                <div class="border-t pt-4">
+                    <p class="text-sm text-gray-500">Direct reporting links for social media platforms</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- State-wise Helplines -->
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-12">
+        <div class="p-6">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">State-wise Cyber Crime Units</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="space-y-3">
+                    <h3 class="font-semibold text-gray-900">Delhi</h3>
+                    <p class="text-gray-600">155260</p>
+                    <p class="text-sm text-gray-500">Delhi Police Cybercell</p>
+                </div>
+                <div class="space-y-3">
+                    <h3 class="font-semibold text-gray-900">Maharashtra</h3>
+                    <p class="text-gray-600">022-26504008</p>
+                    <p class="text-sm text-gray-500">Mumbai Cyber Police</p>
+                </div>
+                <div class="space-y-3">
+                    <h3 class="font-semibold text-gray-900">Karnataka</h3>
+                    <p class="text-gray-600">080-22094498</p>
+                    <p class="text-sm text-gray-500">Bengaluru Cyber Crime</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Tips Section -->
+    <div class="bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl p-8 shadow-lg">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Quick Response Tips</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-white p-4 rounded-lg shadow">
+                <div class="text-blue-600 mb-3">
+                    <i class="fas fa-clock text-xl"></i>
+                </div>
+                <h3 class="font-semibold mb-2">Act Fast</h3>
+                <p class="text-sm text-gray-600">Report within 24 hours for better chances of resolution</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow">
+                <div class="text-blue-600 mb-3">
+                    <i class="fas fa-file-alt text-xl"></i>
+                </div>
+                <h3 class="font-semibold mb-2">Document Everything</h3>
+                <p class="text-sm text-gray-600">Keep screenshots and records of all communications</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow">
+                <div class="text-blue-600 mb-3">
+                    <i class="fas fa-lock text-xl"></i>
+                </div>
+                <h3 class="font-semibold mb-2">Secure Accounts</h3>
+                <p class="text-sm text-gray-600">Change passwords immediately if compromised</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow">
+                <div class="text-blue-600 mb-3">
+                    <i class="fas fa-hand-paper text-xl"></i>
+                </div>
+                <h3 class="font-semibold mb-2">Stop Transactions</h3>
+                <p class="text-sm text-gray-600">Block cards and inform bank immediately</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}Cyber Laws{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="relative overflow-hidden bg-gradient-to-br from-slate-50 to-blue-50 rounded-3xl mb-16">
+    <div class="absolute inset-0">
+        <div class="absolute inset-0 bg-gradient-to-r from-slate-500/10 to-blue-500/10"></div>
+        <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white"></div>
+    </div>
+    <div class="relative max-w-6xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                Indian Cyber Laws
+                <span class="block text-2xl mt-2 text-blue-600">Understanding Your Digital Rights</span>
+            </h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Stay informed about the legal framework that protects your digital presence and ensures cybersecurity in India.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Laws Grid -->
+<div class="max-w-6xl mx-auto">
+    <div class="grid md:grid-cols-2 gap-8">
+        <!-- IT Act Section -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+            <div class="p-6">
+                <div class="flex items-center space-x-4 mb-6">
+                    <div class="bg-blue-100 p-3 rounded-lg">
+                        <i class="fas fa-laptop-code text-2xl text-blue-600"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900">Information Technology Act, 2000</h2>
+                </div>
+                <div class="space-y-4 text-gray-600">
+                    <p class="leading-relaxed">
+                        The IT Act provides legal recognition to electronic documents and digital signatures. It addresses:
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start space-x-3">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                            <span>Cybercrime and fraud prevention</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                            <span>Digital signatures and electronic records</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                            <span>E-governance and e-commerce regulations</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="bg-gray-50 px-6 py-4">
+                <a href="https://www.meity.gov.in/content/information-technology-act-2000" 
+                   class="text-blue-600 hover:text-blue-800 flex items-center space-x-2"
+                   target="_blank">
+                    <span>Learn More</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Penalties Section -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+            <div class="p-6">
+                <div class="flex items-center space-x-4 mb-6">
+                    <div class="bg-red-100 p-3 rounded-lg">
+                        <i class="fas fa-gavel text-2xl text-red-600"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900">Penalties and Punishments</h2>
+                </div>
+                <div class="space-y-4">
+                    <div class="bg-red-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-red-900 mb-2">Unauthorized Access</h3>
+                        <p class="text-red-800">Up to ₹1 crore fine and imprisonment</p>
+                    </div>
+                    <div class="bg-orange-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-orange-900 mb-2">Data Theft</h3>
+                        <p class="text-orange-800">Up to 3 years imprisonment or fine up to ₹5 lakhs</p>
+                    </div>
+                    <div class="bg-yellow-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-yellow-900 mb-2">Identity Theft</h3>
+                        <p class="text-yellow-800">Up to 3 years imprisonment and fine up to ₹1 lakh</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Laws Section -->
+    <div class="mt-12 grid md:grid-cols-3 gap-8">
+        <div class="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-xl shadow-lg">
+            <div class="text-purple-600 mb-4">
+                <i class="fas fa-shield-alt text-3xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">Data Protection</h3>
+            <p class="text-gray-600 mb-4">
+                Guidelines for collecting, processing, and storing personal data securely.
+            </p>
+            <ul class="space-y-2 text-gray-700">
+                <li class="flex items-center space-x-2">
+                    <i class="fas fa-dot-circle text-purple-500 text-sm"></i>
+                    <span>Consent requirements</span>
+                </li>
+                <li class="flex items-center space-x-2">
+                    <i class="fas fa-dot-circle text-purple-500 text-sm"></i>
+                    <span>Privacy policies</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-xl shadow-lg">
+            <div class="text-blue-600 mb-4">
+                <i class="fas fa-user-shield text-3xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">Privacy Rights</h3>
+            <p class="text-gray-600 mb-4">
+                Individual rights regarding personal information and digital privacy.
+            </p>
+            <ul class="space-y-2 text-gray-700">
+                <li class="flex items-center space-x-2">
+                    <i class="fas fa-dot-circle text-blue-500 text-sm"></i>
+                    <span>Right to access</span>
+                </li>
+                <li class="flex items-center space-x-2">
+                    <i class="fas fa-dot-circle text-blue-500 text-sm"></i>
+                    <span>Right to erasure</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="bg-gradient-to-br from-emerald-50 to-teal-50 p-6 rounded-xl shadow-lg">
+            <div class="text-emerald-600 mb-4">
+                <i class="fas fa-balance-scale text-3xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">Corporate Compliance</h3>
+            <p class="text-gray-600 mb-4">
+                Legal requirements for businesses handling digital information.
+            </p>
+            <ul class="space-y-2 text-gray-700">
+                <li class="flex items-center space-x-2">
+                    <i class="fas fa-dot-circle text-emerald-500 text-sm"></i>
+                    <span>Security standards</span>
+                </li>
+                <li class="flex items-center space-x-2">
+                    <i class="fas fa-dot-circle text-emerald-500 text-sm"></i>
+                    <span>Breach reporting</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="mt-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl shadow-lg overflow-hidden">
+        <div class="px-6 py-12 text-center text-white">
+            <h2 class="text-3xl font-bold mb-4">Need Legal Assistance?</h2>
+            <p class="text-lg mb-8 opacity-90">
+                Contact our cybersecurity experts or legal advisors for guidance.
+            </p>
+            <div class="flex justify-center space-x-4">
+                <a href="/helplines" 
+                   class="bg-white text-blue-600 px-6 py-3 rounded-lg hover:bg-blue-50 transition-colors">
+                    Contact Helpline
+                </a>
+                <button onclick="toggleChat()" 
+                        class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-400 transition-colors">
+                    Chat with Expert
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

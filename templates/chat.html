@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Chat{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <div class="bg-white rounded-lg shadow p-4">
+        <div id="chat-messages" class="h-96 overflow-y-auto mb-4 p-4 space-y-4">
+            <div class="bg-blue-100 p-3 rounded-lg">
+                <p class="text-blue-800">Hello! I'm your Cybersecurity Assistant. How can I help you stay safe online today?</p>
+            </div>
+        </div>
+        
+        <div class="flex gap-2">
+            <input type="text" id="user-input" 
+                   class="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                   placeholder="Type your message here...">
+            <button onclick="sendMessage()" 
+                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                Send
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+function sendMessage() {
+    const userInput = document.getElementById('user-input');
+    const message = userInput.value.trim();
+    if (!message) return;
+
+    // Add user message to chat
+    addMessage(message, 'user');
+    userInput.value = '';
+
+    // Send message to server
+    fetch('/get_response', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: message })
+    })
+    .then(response => response.json())
+    .then(data => {
+        addMessage(data.response, 'bot');
+    })
+    .catch(error => {
+        addMessage('Sorry, something went wrong. Please try again.', 'bot');
+    });
+}
+
+function addMessage(message, sender) {
+    const chatMessages = document.getElementById('chat-messages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = sender === 'user' 
+        ? 'bg-gray-100 p-3 rounded-lg ml-12' 
+        : 'bg-blue-100 p-3 rounded-lg mr-12';
+    messageDiv.innerHTML = `<p class="${sender === 'user' ? 'text-gray-800' : 'text-blue-800'}">${message}</p>`;
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Allow sending message with Enter key
+document.getElementById('user-input').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        sendMessage();
+    }
+});
+</script>
+{% endblock %} 

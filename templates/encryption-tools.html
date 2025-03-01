@@ -1,0 +1,664 @@
+{% extends "base.html" %}
+
+{% block title %}Encryption Tools{% endblock %}
+
+{% block content %}
+<head>
+    <style>
+        .fade-enter {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        .fade-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+        .panel-transition {
+            transition: all 0.3s ease;
+        }
+        .hover-scale {
+            transition: transform 0.2s ease;
+        }
+        .hover-scale:hover {
+            transform: scale(1.02);
+        }
+        .loading-overlay {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(2px);
+        }
+    </style>
+</head>
+
+<div class="max-w-6xl mx-auto">
+    <!-- Hero Section -->
+    <div class="text-center mb-16">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 text-gray-800 relative">
+            Encryption Tools
+            <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-blue-600"></div>
+        </h1>
+        <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            Secure your data with AES and DES encryption
+            <span class="block mt-2 text-sm text-gray-500">Choose between text or file encryption, with support for multiple algorithms</span>
+        </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8">
+        <!-- Encryption Panel -->
+        <div class="bg-white p-8 rounded-xl shadow-lg hover-scale relative overflow-hidden">
+            <div class="loading-overlay absolute inset-0 hidden flex items-center justify-center" id="encrypt-loading">
+                <div class="text-center">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-3"></div>
+                    <p class="text-gray-600">Processing...</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4 mb-6">
+                <div class="text-blue-600">
+                    <i class="fas fa-lock text-3xl"></i>
+                </div>
+                <h2 class="text-2xl font-semibold">Encryption</h2>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Algorithm Selection -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Algorithm</label>
+                    <select id="algorithm" class="w-full p-2 border rounded-lg">
+                        <option value="aes">AES-128</option>
+                        <option value="des">DES</option>
+                    </select>
+                </div>
+
+                <!-- Encryption Type -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Encryption Type</label>
+                    <select id="encryption-type" class="w-full p-2 border rounded-lg" onchange="toggleEncryptionInput()">
+                        <option value="text">Text</option>
+                        <option value="file">File</option>
+                    </select>
+                </div>
+
+                <!-- Key Input -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Encryption Key</label>
+                    <div class="flex gap-2">
+                        <input type="text" 
+                               id="encryption-key" 
+                               class="flex-1 p-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all"
+                               placeholder="Enter or generate key"
+                               autocomplete="off">
+                        <button onclick="generateKey()" 
+                                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                            Generate
+                        </button>
+                    </div>
+                </div>
+
+                <!-- File Input -->
+                <div id="file-section" class="hidden">
+                    <div id="drop-zone" 
+                         class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center group transition-all duration-300 hover:border-blue-500 hover:bg-blue-50/50">
+                        <div class="transform transition-transform group-hover:scale-110">
+                            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4 group-hover:text-blue-500"></i>
+                            <p class="text-gray-600">Drag and drop files here or click to select (Max 1MB)</p>
+                        </div>
+                        <input type="file" id="file-input" class="hidden">
+                    </div>
+                    
+                    <div id="file-info" class="hidden mt-4 space-y-2">
+                        <div class="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+                            <div>
+                                <p id="file-name" class="font-medium"></p>
+                                <p id="file-size" class="text-sm text-gray-600"></p>
+                            </div>
+                            <button onclick="clearFile()" class="text-red-600 hover:text-red-800">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Text Input -->
+                <div id="text-section">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Text to Encrypt</label>
+                    <textarea id="plaintext" 
+                              class="w-full p-2 border rounded-lg h-32" 
+                              placeholder="Enter text to encrypt"></textarea>
+                </div>
+
+                <button onclick="encrypt()" 
+                        class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                    Encrypt
+                </button>
+
+                <div id="encryption-result" class="hidden mt-4 p-4 bg-gray-50 rounded-lg">
+                    <div class="mb-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Encrypted Content:</label>
+                        <textarea class="w-full p-2 border rounded-lg" id="ciphertext" readonly></textarea>
+                    </div>
+                    <div class="relative group" title="Click to copy">
+                        <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                            IV (Save this for decryption)
+                            <i class="fas fa-info-circle ml-2 text-gray-400 hover:text-gray-600 cursor-help"></i>
+                            <div class="hidden group-hover:block absolute top-0 left-full ml-2 p-2 bg-gray-800 text-white text-xs rounded shadow-lg w-48">
+                                The Initialization Vector is required for decryption. Make sure to save it along with your encrypted content.
+                            </div>
+                        </label>
+                        <div class="relative">
+                            <input type="text" class="w-full p-2 border rounded-lg" id="iv" readonly>
+                            <button onclick="copyToClipboard('iv')" 
+                                    class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="download-section" class="hidden mt-4">
+                        <button onclick="downloadEncryptedFile()" 
+                                class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
+                            Download Encrypted File
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decryption Panel -->
+        <div class="bg-white p-8 rounded-xl shadow-lg">
+            <div class="loading-overlay absolute inset-0 hidden flex items-center justify-center" id="decrypt-loading">
+                <div class="text-center">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-3"></div>
+                    <p class="text-gray-600">Processing...</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4 mb-6">
+                <div class="text-blue-600">
+                    <i class="fas fa-unlock text-3xl"></i>
+                </div>
+                <h2 class="text-2xl font-semibold">Decryption</h2>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Algorithm Selection -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Algorithm</label>
+                    <select id="decrypt-algorithm" class="w-full p-2 border rounded-lg">
+                        <option value="aes">AES-128</option>
+                        <option value="des">DES</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Decryption Type</label>
+                    <select id="decryption-type" class="w-full p-2 border rounded-lg" onchange="toggleDecryptionInput()">
+                        <option value="text">Text</option>
+                        <option value="file">File</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">IV</label>
+                    <input type="text" id="decrypt-iv" 
+                           class="w-full p-2 border rounded-lg" 
+                           placeholder="Enter IV value">
+                </div>
+
+                <div id="decrypt-text-section">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Encrypted Text</label>
+                    <textarea id="decrypt-ciphertext" 
+                              class="w-full p-2 border rounded-lg h-32" 
+                              placeholder="Enter encrypted text"></textarea>
+                </div>
+
+                <div id="decrypt-file-section" class="hidden">
+                    <div id="decrypt-drop-zone" 
+                         class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-500 transition-colors">
+                        <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"></i>
+                        <p class="text-gray-600">Drag and drop encrypted file here or click to select</p>
+                        <input type="file" id="decrypt-file-input" class="hidden">
+                    </div>
+                    
+                    <div id="decrypt-file-info" class="hidden mt-4 space-y-2">
+                        <div class="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+                            <div>
+                                <p id="decrypt-file-name" class="font-medium"></p>
+                                <p id="decrypt-file-size" class="text-sm text-gray-600"></p>
+                            </div>
+                            <button onclick="clearDecryptFile()" class="text-red-600 hover:text-red-800">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Decryption Key</label>
+                    <input type="text" id="decryption-key" 
+                           class="w-full p-2 border rounded-lg" 
+                           placeholder="Enter decryption key">
+                </div>
+
+                <button onclick="decrypt()" 
+                        class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                    Decrypt
+                </button>
+
+                <div id="decryption-result" class="hidden mt-4 p-4 bg-gray-50 rounded-lg">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Decrypted Content:</label>
+                    <textarea class="w-full p-2 border rounded-lg" id="decrypted-text" readonly></textarea>
+                    <div id="decrypt-download-section" class="hidden mt-4">
+                        <button onclick="downloadDecryptedFile()" 
+                                class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
+                            Download Decrypted File
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Drag and drop functionality
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, preventDefaults, false);
+});
+
+function preventDefaults (e) {
+    e.preventDefault();
+    e.stopPropagation();
+}
+
+['dragenter', 'dragover'].forEach(eventName => {
+    dropZone.addEventListener(eventName, highlight, false);
+});
+
+['dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, unhighlight, false);
+});
+
+function highlight(e) {
+    dropZone.classList.add('border-blue-500');
+}
+
+function unhighlight(e) {
+    dropZone.classList.remove('border-blue-500');
+}
+
+dropZone.addEventListener('drop', handleDrop, false);
+dropZone.addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', handleFiles);
+
+function handleDrop(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    handleFiles(files);
+}
+
+function handleFiles(e) {
+    const files = e.target?.files || e;
+    const file = files[0];
+    if (file) {
+        document.getElementById('file-info').classList.remove('hidden');
+        const icon = getFileIcon(file.name);
+        document.getElementById('file-name').innerHTML = `
+            <i class="fas ${icon} text-blue-500 mr-2"></i>
+            ${file.name}
+        `;
+        document.getElementById('file-size').textContent = 
+            `Size: ${(file.size / 1024).toFixed(2)} KB`;
+
+        if (file.size > 1024 * 1024) {
+            alert('File size exceeds 1 MB limit');
+            clearFile();
+            return;
+        }
+
+        // Store the file for later encryption
+        window.fileToEncrypt = file;
+    }
+}
+
+function clearFile() {
+    document.getElementById('file-info').classList.add('hidden');
+    document.getElementById('file-input').value = '';
+    window.fileToEncrypt = null;
+}
+
+// Encryption/Decryption functionality
+async function generateKey() {
+    const algorithm = document.getElementById('algorithm').value;
+    const response = await fetch('/generate-key', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ type: algorithm })
+    });
+    const data = await response.json();
+    document.getElementById('encryption-key').value = data.key;
+}
+
+function toggleEncryptionInput() {
+    const type = document.getElementById('encryption-type').value;
+    const fileSection = document.getElementById('file-section');
+    const textSection = document.getElementById('text-section');
+    
+    fileSection.style.opacity = '0';
+    textSection.style.opacity = '0';
+    
+    setTimeout(() => {
+        fileSection.classList.toggle('hidden', type === 'text');
+        textSection.classList.toggle('hidden', type === 'file');
+        
+        requestAnimationFrame(() => {
+            fileSection.style.opacity = type === 'file' ? '1' : '0';
+            textSection.style.opacity = type === 'text' ? '1' : '0';
+        });
+    }, 300);
+}
+
+function toggleDecryptionInput() {
+    const type = document.getElementById('decryption-type').value;
+    document.getElementById('decrypt-text-section').classList.toggle('hidden', type === 'file');
+    document.getElementById('decrypt-file-section').classList.toggle('hidden', type === 'text');
+}
+
+async function encrypt() {
+    showLoading('encrypt');
+    try {
+        const type = document.getElementById('encryption-type').value;
+        const key = document.getElementById('encryption-key').value;
+        const algorithm = document.getElementById('algorithm').value;
+
+        if (!key) {
+            alert('Please enter an encryption key');
+            return;
+        }
+
+        if (type === 'text') {
+            // Text encryption
+            const text = document.getElementById('plaintext').value;
+            if (!text) {
+                alert('Please enter text to encrypt');
+                return;
+            }
+
+            const response = await fetch('/encrypt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text, key, algorithm })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                document.getElementById('encryption-result').classList.remove('hidden');
+                document.getElementById('ciphertext').value = data.ciphertext;
+                document.getElementById('iv').value = data.iv;
+                document.getElementById('download-section').classList.add('hidden');
+            } else {
+                alert('Encryption failed: ' + data.error);
+            }
+        } else {
+            // File encryption
+            if (!window.fileToEncrypt) {
+                alert('Please select a file to encrypt');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', window.fileToEncrypt);
+            formData.append('key', key);
+            formData.append('algorithm', algorithm);
+
+            const response = await fetch('/encrypt-file', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                document.getElementById('encryption-result').classList.remove('hidden');
+                document.getElementById('ciphertext').value = data.ciphertext;
+                document.getElementById('iv').value = data.iv;
+                document.getElementById('download-section').classList.remove('hidden');
+                window.encryptedFileName = data.filename;
+            } else {
+                alert('Encryption failed: ' + data.error);
+            }
+        }
+    } catch (error) {
+        console.error('Encryption error:', error);
+        alert('Error during encryption: ' + error.message);
+    } finally {
+        hideLoading('encrypt');
+    }
+}
+
+function downloadEncryptedFile() {
+    const ciphertext = document.getElementById('ciphertext').value;
+    const blob = new Blob([ciphertext], { type: 'application/octet-stream' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'encrypted_' + (window.encryptedFileName || 'file.enc');
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+}
+
+// Add these new functions for decryption handling
+const decryptDropZone = document.getElementById('decrypt-drop-zone');
+const decryptFileInput = document.getElementById('decrypt-file-input');
+
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    decryptDropZone.addEventListener(eventName, preventDefaults, false);
+});
+
+['dragenter', 'dragover'].forEach(eventName => {
+    decryptDropZone.addEventListener(eventName, highlightDecrypt, false);
+});
+
+['dragleave', 'drop'].forEach(eventName => {
+    decryptDropZone.addEventListener(eventName, unhighlightDecrypt, false);
+});
+
+function highlightDecrypt(e) {
+    decryptDropZone.classList.add('border-blue-500');
+}
+
+function unhighlightDecrypt(e) {
+    decryptDropZone.classList.remove('border-blue-500');
+}
+
+decryptDropZone.addEventListener('drop', handleDecryptDrop, false);
+decryptDropZone.addEventListener('click', () => decryptFileInput.click());
+decryptFileInput.addEventListener('change', handleDecryptFiles);
+
+function handleDecryptDrop(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    handleDecryptFiles(files);
+}
+
+function handleDecryptFiles(e) {
+    const files = e.target?.files || e;
+    const file = files[0];
+    if (file) {
+        document.getElementById('decrypt-file-info').classList.remove('hidden');
+        document.getElementById('decrypt-file-name').textContent = file.name;
+        document.getElementById('decrypt-file-size').textContent = 
+            `Size: ${(file.size / 1024).toFixed(2)} KB`;
+
+        if (file.size > 1024 * 1024) {
+            alert('File size exceeds 1 MB limit');
+            clearDecryptFile();
+            return;
+        }
+
+        window.fileToDecrypt = file;
+    }
+}
+
+function clearDecryptFile() {
+    document.getElementById('decrypt-file-info').classList.add('hidden');
+    document.getElementById('decrypt-file-input').value = '';
+    window.fileToDecrypt = null;
+}
+
+async function decrypt() {
+    try {
+        const type = document.getElementById('decryption-type').value;
+        const key = document.getElementById('decryption-key').value;
+        const iv = document.getElementById('decrypt-iv').value;
+        const algorithm = document.getElementById('decrypt-algorithm').value;
+
+        if (!key || !iv) {
+            alert('Please enter both key and IV');
+            return;
+        }
+
+        if (type === 'text') {
+            const ciphertext = document.getElementById('decrypt-ciphertext').value;
+            if (!ciphertext) {
+                alert('Please enter encrypted text');
+                return;
+            }
+
+            const response = await fetch('/decrypt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ ciphertext, key, iv, algorithm })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                document.getElementById('decryption-result').classList.remove('hidden');
+                document.getElementById('decrypted-text').value = data.plaintext;
+                document.getElementById('decrypt-download-section').classList.add('hidden');
+            } else {
+                alert('Decryption failed: ' + data.error);
+            }
+        } else {
+            if (!window.fileToDecrypt) {
+                alert('Please select a file to decrypt');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', window.fileToDecrypt);
+            formData.append('key', key);
+            formData.append('iv', iv);
+            formData.append('algorithm', algorithm);
+
+            const response = await fetch('/decrypt-file', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                document.getElementById('decryption-result').classList.remove('hidden');
+                document.getElementById('decrypted-text').value = data.plaintext;
+                
+                // Store the raw data for download
+                window.decryptedContent = data.raw_data;
+                window.decryptedFileName = window.fileToDecrypt.name.replace('.enc', '');
+                
+                // Show download button for binary files or long content
+                const shouldShowDownload = !data.is_text || data.plaintext.length > 1000;
+                document.getElementById('decrypt-download-section').classList.toggle('hidden', !shouldShowDownload);
+            } else {
+                alert('Decryption failed: ' + data.error);
+            }
+        }
+    } catch (error) {
+        console.error('Decryption error:', error);
+        alert('Error during decryption: ' + error.message);
+    }
+}
+
+function downloadDecryptedFile() {
+    // Get the raw data from the API response
+    const rawData = window.decryptedContent;
+    let blob;
+    
+    try {
+        // Convert base64 to binary data
+        const binaryData = atob(rawData);
+        
+        // Convert binary string to byte array
+        const bytes = new Uint8Array(binaryData.length);
+        for (let i = 0; i < binaryData.length; i++) {
+            bytes[i] = binaryData.charCodeAt(i);
+        }
+        
+        // Create blob from byte array
+        blob = new Blob([bytes], { type: 'application/octet-stream' });
+    } catch (e) {
+        console.error('Error processing binary content:', e);
+        // Fallback to text content if binary conversion fails
+        const textContent = document.getElementById('decrypted-text').value;
+        blob = new Blob([textContent], { type: 'text/plain' });
+    }
+    
+    // Create and trigger download
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'decrypted_' + (window.decryptedFileName || 'file.txt');
+    document.body.appendChild(a);
+    a.click();
+    
+    // Cleanup
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+}
+
+function showLoading(type) {
+    document.getElementById(type + '-loading').classList.remove('hidden');
+}
+
+function hideLoading(type) {
+    document.getElementById(type + '-loading').classList.add('hidden');
+}
+
+function copyToClipboard(elementId) {
+    const element = document.getElementById(elementId);
+    element.select();
+    document.execCommand('copy');
+    
+    // Show feedback
+    const button = event.currentTarget;
+    const icon = button.querySelector('i');
+    icon.className = 'fas fa-check';
+    button.classList.add('text-green-500');
+    
+    setTimeout(() => {
+        icon.className = 'fas fa-copy';
+        button.classList.remove('text-green-500');
+    }, 2000);
+}
+
+// Add file type icons
+function getFileIcon(filename) {
+    const ext = filename.split('.').pop().toLowerCase();
+    const icons = {
+        pdf: 'fa-file-pdf',
+        doc: 'fa-file-word',
+        docx: 'fa-file-word',
+        txt: 'fa-file-alt',
+        // Add more file types as needed
+        default: 'fa-file'
+    };
+    return icons[ext] || icons.default;
+}
+</script>
+{% endblock %} 
